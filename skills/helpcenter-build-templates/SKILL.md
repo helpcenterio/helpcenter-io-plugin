@@ -87,6 +87,18 @@ Each write takes up to 50 entries, applied all-or-nothing; an error names the fa
 entry by position. Read warnings in every result and act on them ("left the draft exactly
 as it was" means nothing changed).
 
+Traps the tools will not stop you from (each one has shipped in a test run):
+
+- The category page lists its own articles, and the category and article pages draw their
+  own breadcrumbs. Never add ArticleList or Breadcrumbs to them: they render twice.
+- The `utility` region is a right-hand rail only in `three-columns` (and docked) layouts;
+  anywhere else it renders under the footer.
+- An `id` you choose must be unused anywhere in the draft, not just on that page.
+- Article code blocks are syntax-highlighted for a DARK panel (`pre code.hljs` sets its own
+  light text). Keep `pre` dark in both appearances, or the code turns invisible.
+- A theme's custom CSS outranks region and Hero background settings; the result warns
+  when that happens.
+
 ### 4. Check and hand over
 
 Run `references/quality-checklist.md`: read the outline back, contrast in both

@@ -40,7 +40,7 @@ look.
 | Category grid | `.hc-card-list` (the section), `.hc-category-grid--cards` (the grid of the cards, horizontal and with-articles variants), `li[data-hc-category-id]` (one per category), `section.hc-category-section` (the sections variant) |
 | Category card | cards / horizontal: the card is the link, `.hc-category-grid--cards > li > a`. with-articles: the card is the item, `.hc-category-grid--cards > li` (its title link is `> li > a`, and its article list `.hc-cat-articles`) |
 | Card title | `.hc-category-grid--cards > li > a span.font-heading` (also used by the built-in themes) |
-| Article page | `.hc-article`, `.hc-article__header`, `.hc-article__eyebrow`, `.hc-article__title`, `.hc-article__content` (the body), `.hc-article-meta` with `__author`, `__date`, `__reading-time`, `__sep` |
+| Article page | `.hc-article`, `.hc-article__header`, `.hc-article__eyebrow`, `.hc-article__title`, `.hc-article__content` (the body), `.hc-article-meta` with `__author`, `__date`, `__reading-time`, `__sep`; code blocks are `pre > code.hljs`, highlighted for a dark background |
 | Sidebar tools | `.hc-toc` (table of contents), `.hc-content-tree`, `.hc-breadcrumbs` |
 | Blocks | `[data-hc-component-type="Container"]` (plus `.hc-container--primary` when filled with the primary), `.hc-custom-html`, `.hc-custom-html--bleed`, `.hc-contact-cta`, `.hc-faq-list`, `.hc-search-results` |
 | Your own markup | classes you put in CustomHtml (prefix them with the brand, e.g. `.acme-banner`) |
@@ -237,6 +237,13 @@ first, which is why the eyebrow must be a label, never content the heading depen
   border-block-start: 1px solid var(--hc-color-border);
 }
 .hc-article__content a { text-underline-offset: .2em; }
+/* Code blocks are highlighted with a dark theme: `pre code.hljs` carries light text and
+   token colours, so the panel must stay dark in BOTH appearances. */
+.hc-article__content pre {
+  background: #0b1220;
+  border: 1px solid color-mix(in srgb, var(--hc-color-primary) 30%, transparent);
+  border-radius: var(--hc-radius-md);
+}
 /* Inline code as a chip: the article styles add backticks around inline code; drop them
    when you give it a background. Leave code inside pre blocks alone. */
 .hc-article__content :not(pre) > code {
