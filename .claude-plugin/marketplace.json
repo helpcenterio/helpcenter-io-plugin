@@ -10,7 +10,7 @@
     {
       "name": "helpcenter-io",
       "source": "./",
-      "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, find answers, draft and stage articles, and find content gaps."
+      "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, add the widget, FAQ sections and single sign-on to a website, find answers, draft and stage articles, and find content gaps."
     }
   ]
 }

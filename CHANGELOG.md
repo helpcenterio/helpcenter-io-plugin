@@ -4,6 +4,23 @@ All notable changes to the HelpCenter.io plugin. Versions apply to both the Clau
 (`.claude-plugin/plugin.json`) and the ChatGPT plugin (`openai/plugin.json`), which share
 one set of skills.
 
+## 1.4.0 (2026-10-21)
+
+Add help to a client's website in minutes.
+
+- **helpcenter-integrate-widget**, a new skill for the website's own code: the widget
+  (loaded once, its own button, per-page articles, links that open articles inside it,
+  contact hand-off, events for proactive messages), inline FAQ sections, and JWT single
+  sign-on for a private help center (the token endpoint and the Login URL, in Node.js,
+  Python, PHP and Ruby). Recipes for plain HTML, Next.js (App and Pages Router), React and
+  Vue with Vite, Nuxt, Laravel, Rails, Django and WordPress, and paste-in steps for Webflow,
+  Wix, Shopify and Squarespace. It updates an existing Content Security Policy with only the
+  sources the widget needs, writes FAQ entries through the connector, verifies the result,
+  and hands the user the dashboard steps no tool can do yet, with the values filled in.
+  The single sign-on secret stays in the server's environment and out of the conversation.
+- Tested by fresh Claude Code sessions with only this plugin, on a static site, a React
+  single-page app and a Next.js app with sign-in, each checked in a browser afterwards.
+
 ## 1.3.0 (2026-10-21)
 
 First release from this repository, and the first for Claude.
