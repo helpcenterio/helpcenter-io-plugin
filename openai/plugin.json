@@ -1,0 +1,55 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "helpcenter-io",
+  "version": "1.2.0",
+  "description": "Build and maintain your HelpCenter.io knowledge base: answers, articles, templates, and content insights.",
+  "author": {
+    "name": "HelpCenter.io",
+    "url": "https://helpcenter.io"
+  },
+  "homepage": "https://developers.helpcenter.io/content/connect-an-ai-assistant-to-your-help-center",
+  "repository": "https://github.com/helpcenterio/helpcenter-io-plugin",
+  "license": "MIT",
+  "keywords": [
+    "knowledge-base",
+    "customer-support",
+    "documentation",
+    "helpcenter"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "HelpCenter.io",
+        "shortDescription": "Build and manage a help center",
+        "longDescription": "Build and maintain your HelpCenter.io help center in conversation. Find answers in existing articles, draft documentation, stage edits for review, organize categories, and identify content gaps from analytics. Build or refine your help center’s visual template, branding, page layouts, navigation, and theme as a draft in the Template Editor. Review reader comments and private editorial notes when you grant the relevant permissions. Connect through OAuth and choose the help center and permissions to share; design access is separate from content access. Published changes and public replies take effect immediately. Keep content and template edits as drafts until you are ready to release them.",
+        "developerName": "HelpCenter Solutions",
+        "category": "Productivity",
+        "capabilities": [
+          "Search knowledge",
+          "Draft articles",
+          "Build templates",
+          "Analyze content gaps"
+        ],
+        "websiteURL": "https://helpcenter.io",
+        "supportURL": "https://self.helpcenter.io",
+        "privacyPolicyURL": "https://helpcenter.io/legal/privacy",
+        "termsOfServiceURL": "https://helpcenter.io/legal/terms",
+        "defaultPrompt": [
+          "Find our getting started articles and summarize the steps with source links.",
+          "Create an unpublished help article from the product notes I provide.",
+          "Build a branded help center template as a draft for me to review before publishing."
+        ],
+        "brandColor": "#DD5784",
+        "brandColorDark": "#DD5784",
+        "composerIcon": "./assets/icon.png",
+        "composerIconDark": "./assets/icon.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo.png"
+      },
+      "onboardingSkill": "./skills/helpcenter-get-started/SKILL.md",
+      "publication": {
+        "release_notes": "Initial HelpCenter.io plugin with OAuth, knowledge search, draft articles, staged edits, template building and branding, category management, analytics, reader comments, and private editorial workflows. Design work stays in a draft until explicitly published."
+      }
+    }
+  }
+}

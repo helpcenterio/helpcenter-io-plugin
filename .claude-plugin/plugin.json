@@ -1,0 +1,22 @@
+{
+  "name": "helpcenter-io",
+  "version": "1.2.0",
+  "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, find answers in your articles, draft and stage content, and find content gaps from analytics.",
+  "author": {
+    "name": "HelpCenter.io",
+    "email": "support@helpcenter.io",
+    "url": "https://helpcenter.io"
+  },
+  "homepage": "https://developers.helpcenter.io/content/connect-an-ai-assistant-to-your-help-center",
+  "repository": "https://github.com/helpcenterio/helpcenter-io-plugin",
+  "license": "MIT",
+  "keywords": [
+    "help-center",
+    "knowledge-base",
+    "customer-support",
+    "documentation",
+    "theme",
+    "design",
+    "mcp"
+  ]
+}
