@@ -120,7 +120,7 @@ One family in two weights is a perfectly good choice.
 
 | Path | Notes |
 |---|---|
-| `brand.name` | Shown by a text Logo, the footer brand block, page titles, emails. Never empty. |
+| `brand.name` | Shown by a text Logo, the footer brand block, page titles, emails. Never empty. Publishing the design also renames the help center in the dashboard to it. |
 | `brand.tagline` | A short line under the name in the footer brand block. |
 | `brand.logoAssetId` | Logo image. Takes a URL, or `{"source_url": "https://…"}` to copy an image (PNG, JPEG, GIF, WebP, SVG, ICO) onto this help center. The Logo renders it 32px tall; resize with CSS if needed. |
 | `brand.logoDarkAssetId` | Optional logo for dark mode; the Logo swaps to it automatically. Use it when the main logo is dark ink. |
