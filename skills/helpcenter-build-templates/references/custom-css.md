@@ -59,7 +59,7 @@ selector such as `[data-hc-component-type="Logo"] a` matches nothing.
 | Logo | `a[data-hc-component-type="Logo"]` is the link; inside, a `span` with the brand name (text variant) or `img.hc-logo-img` | `[data-hc-component-type="Logo"]` itself, e.g. `{ font-weight: 800; letter-spacing: -.03em; }`; an image's size via `[data-hc-component-type="Logo"] img { height: 40px; }` |
 | Navigation | `nav[data-hc-component-type="Navigation"] > ul > li > a` | the `a`; a single item via its `cssClass` |
 | SearchBar | `form[data-hc-component-type="SearchBar"]` > `.hc-search-shell` (the visible field: border, background, radius, height) > `.hc-search-icon`, a transparent borderless `input`, `.hc-search-submit` / `.hc-ask-ai` buttons; helper text is a `p` after the shell; instant results in `.hc-search-dropdown` | the **shell**. Never give the `input` its own border, background or padding: it doubles the field and overflows on phones. Colour the placeholder with `input::placeholder`. |
-| Hero | `.hc-hero` (paint) > `.hc-hero-content` (a flex column: the h1 heading, the subheading `p`, then the children in order) | see the Hero recipe; to show a child above the heading (an eyebrow), give it `order: -1`: `.hc-hero-content [data-hc-instance-id="<id>"] { order: -1; }` |
+| Hero | `.hc-hero` (paint) > `.hc-hero-content` (a flex column: the h1 heading, the subheading `p`, then ONE wrapper `div` holding the children in order) | see the Hero recipe and "Eyebrow above the hero heading" below |
 | CategoryGrid | `section.hc-card-list[data-hc-component-type="CategoryGrid"]` > optional `h2` heading > `ul.hc-category-grid--cards` > `li[data-hc-category-id]` > `a` (the card, for cards and horizontal) | see the card recipes |
 | Container | `div[data-hc-component-type="Container"]`, a flex box (`.hc-container--primary` when filled with the primary) | the container, or one instance by id; its children keep their own hooks |
 | CustomHtml | `.hc-custom-html` (`.hc-custom-html--bleed` when full-bleed) > your markup | your own classes |
@@ -213,6 +213,22 @@ both appearances.
 (Prefer `helpcenter_update_template_region` `background: "var(--hc-color-primary)"` when no
 theme CSS paints the header: the text colour is then chosen for you.)
 
+**Eyebrow above the hero heading** (a short RichText child of the Hero)
+
+The children sit in a wrapper after the heading, so `order` on a child alone does nothing.
+Flatten the wrapper first (the default theme does the same), then lift the eyebrow:
+```css
+.hc-hero-content > div:last-child { display: contents; }
+.hc-hero-content [data-hc-instance-id="<eyebrow id>"] {
+  order: -1;
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--hc-color-primary-text, var(--hc-color-primary));
+}
+```
+Flattening removes the wrapper's spacing; the content column's own gap spaces the
+children. It moves only how the eyebrow is drawn: screen readers still read the heading
+first, which is why the eyebrow must be a label, never content the heading depends on.
+
 **Reading column polish** (article page)
 ```css
 .hc-article__title { letter-spacing: -.015em; }
@@ -221,6 +237,14 @@ theme CSS paints the header: the text colour is then chosen for you.)
   border-block-start: 1px solid var(--hc-color-border);
 }
 .hc-article__content a { text-underline-offset: .2em; }
+/* Inline code as a chip: the article styles add backticks around inline code; drop them
+   when you give it a background. Leave code inside pre blocks alone. */
+.hc-article__content :not(pre) > code {
+  background: color-mix(in srgb, var(--hc-color-primary) 10%, var(--hc-color-surface));
+  padding: .1em .35em; border-radius: var(--hc-radius-sm);
+}
+.hc-article__content :not(pre) > code::before,
+.hc-article__content :not(pre) > code::after { content: none; }
 .hc-article-meta__author, .hc-article-meta__author + .hc-article-meta__sep { display: none; }
 ```
 

@@ -120,7 +120,10 @@ A component is `{id, type, config, children?}`. Its type decides where it may go
 regions) and whether it is one per region; the guide's `components` topic lists both.
 `Hero` and `Container` hold children; add into one with `parent_id`. To build a container
 and its children in one call, give the container an `id` of your own and name it as
-`parent_id` in the later entries of the same call.
+`parent_id` in the later entries of the same call. An id you choose must be unused
+anywhere in the draft: when the same component goes on several pages, let the ids be
+generated, suffix your own per page (`brand-logo-home`, `brand-logo-article`), or build it
+once in a synced region.
 
 Ids are unique within a page and repeat across pages on purpose (each page's copy of a
 synced region shares them). They are how you update, move and remove components, and how

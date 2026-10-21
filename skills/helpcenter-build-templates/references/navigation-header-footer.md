@@ -70,6 +70,15 @@ Common shapes:
 | Minimal (hero does the work) | Logo `left` only on home, with search in the Hero |
 
 - Pages without a hero should have a compact SearchBar in the header.
+- **A `center` slot splits the row into three tracks** (equal left and right, the centre
+  sized to its content) from 1280px wide. A right-hand menu wider than about a third of the
+  header then runs underneath a centred search. With more than three menu items, keep the
+  search `right` beside the menu, or give the menu a row of its own (`block`).
+- **On phones an inline row keeps its slots side by side**, so a menu of four or more items
+  in the `right` slot wraps into a narrow column beside the logo. When the menu is long,
+  use the two-tier shape (menu as a `block` row) or check the 390px view.
+- `variant: "pills"` already draws each item as a pill; a `cssClass` button on top of it
+  becomes a pill inside a pill. Use the button class with the `horizontal` variant.
 - Home usually has its search in the Hero, so its header differs from inner pages. That is
   fine: unsync the header and edit it per page, or build it on one page and copy it with
   `helpcenter_copy_template_region`, then adjust.

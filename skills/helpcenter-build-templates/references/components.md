@@ -59,19 +59,22 @@ The banner: `heading`, `subheading` (a little inline HTML: br, strong, em), `ali
 `heightVariant` compact | standard | tall, and `background`:
 - `gradient`: `gradientStyle` linear (`gradientFrom` → `gradientTo` along `gradientAngle`)
   or radial (a corner glow of `gradientFrom` over `gradientTo`). Empty stops use the
-  theme's primary and accent, so the hero follows the palette in both modes. Explicit hex
-  stops do NOT switch with dark mode.
+  theme's primary and accent, so the hero follows the palette in both modes; a token stop
+  such as `var(--hc-color-accent)` does too. Explicit hex stops do NOT switch with dark
+  mode.
 - `solid`: the primary colour.
 - `image`: `backgroundImageUrl` (URL or `{"source_url": …}`), `backgroundColor` under a
   transparent image, `coverEnabled` + `coverOpacity` for a darkening overlay.
 `textColor` `auto` picks black or white per appearance by measured contrast, and where no
 text colour reads across a whole linear gradient it lays a wash over the band just strong
-enough that one does (pick stops that carry one text colour to avoid it). Force
-`light`/`dark` on an image, which cannot be measured. A Hero holds children: RichText, SearchBar, CategoryGrid,
-Faqs, CustomHtml, Spacer, Divider, Container, and Logo / Navigation / LanguageSwitcher for
-a header overlaid on the banner. The heading and subheading render first and the children
-follow in order, so an eyebrow (a short RichText) lands BELOW the heading unless CSS lifts it
-(`order: -1`, see `custom-css.md`). A new Hero comes with a large SearchBar child; it has no
+enough that one does (pick stops that carry one text colour to avoid it). An image cannot
+be measured, so choose for it: `light` is white in both appearances; `dark` is the body
+text colour, which turns light in dark mode. A Hero holds children: RichText, SearchBar,
+CategoryGrid, Faqs, CustomHtml, Spacer, Divider, Container, and Logo / Navigation /
+LanguageSwitcher with a left/center/right `position`, drawn as a header row across the top
+of the banner. The heading and subheading render first and the children
+follow in order, so an eyebrow (a short RichText) lands BELOW the heading unless CSS lifts
+it (the "Eyebrow above the hero heading" recipe in `custom-css.md`). A new Hero comes with a large SearchBar child; it has no
 search of its own, so keep one.
 
 **Container** (home, category, article, search, notFound · main, sidebar, hero, utility ·
