@@ -16,7 +16,7 @@ Read once, when `init.js` runs. Changing the object afterwards does nothing.
 | `nudgesEnabled` | `false` | No proactive messages on this page. |
 | `jwt`, `onAuthExpired` | token, function | Sign-in for a private help center: jwt-sso.md. |
 | `onWidgetReady` | function | Called once, when the widget takes commands. |
-| `onStateChange` | function `(isOpen) => …` | Called each time the panel opens or closes. |
+| `onStateChange` | function `(isOpen) => …` | Called with the current state every time the widget redraws: several times on load, while a visitor types, and after your own `show()`/`hide()`. Keep the last value and act only when it changes. |
 | `onContactsRequest` | function | Called instead of the built-in contact form when a visitor asks to contact you. |
 | `analyticsAllowed` | function returning boolean | Usage statistics are sent only while it returns true (a consent check). |
 | `privacyMode` | `'essential'` | Search and articles only: no usage statistics, no stored identifiers, no page text, no proactive messages, no FAQ sections. For pages before consent. |
@@ -50,7 +50,7 @@ loaded and found the page's host in Embedding origins. So:
 | `trigger(name)` | Fires a custom event for proactive messages | Queued (20) |
 | `onReady(fn)` | Runs `fn` once ready, or on the next tick if it already is | Queued |
 | `isReady()` | true once ready | false |
-| `destroy()` | Removes the widget, its listeners and its proactive messages from the page | Works |
+| `destroy()` | Removes the widget's frame and listeners and stops its proactive messages. `window.hcWidget` stays defined afterwards (and `isReady()` can still be true), so don't test for it; FAQ sections already drawn stay | Works |
 
 None of them throws. To switch to another user, or back to the first state, reload the page:
 there is no reset.
@@ -74,6 +74,7 @@ declare global {
     jwt?: string;
     onAuthExpired?: () => string | Promise<string>;
     onWidgetReady?: () => void;
+    /** Called on every redraw with the current state, not only on changes. */
     onStateChange?: (isOpen: boolean) => void;
     onContactsRequest?: () => void;
     analyticsAllowed?: () => boolean;
@@ -108,11 +109,16 @@ Hide the launcher and open the widget from the site's own button. Enable the but
 when the widget is ready, so an early click isn't lost:
 
 ```js
+let helpOpen = false;
 window.hcOptions = {
   app_id: 'WIDGET_ID',
   showButton: false,
   onWidgetReady: () => document.getElementById('help-button')?.removeAttribute('disabled'),
-  onStateChange: (isOpen) => document.getElementById('help-button')?.setAttribute('aria-expanded', String(isOpen)),
+  onStateChange: (isOpen) => {
+    if (isOpen === helpOpen) return; // it fires on every redraw, not only on changes
+    helpOpen = isOpen;
+    document.getElementById('help-button')?.setAttribute('aria-expanded', String(isOpen));
+  },
 };
 document.getElementById('help-button')?.addEventListener('click', () => window.hcWidget?.show());
 ```
