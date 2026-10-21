@@ -124,4 +124,7 @@ If the HelpCenter.io tools available to you include ones for a dashboard step ab
 the widget ID, adding embedding origins, creating FAQ sections or attaching FAQs, proactive
 messages, single sign-on settings), use them for that step instead of handing it over, with
 the user's agreement for anything that changes settings. Check the tool list; don't assume.
-The shared secret stays out of the conversation even then.
+Keep the same order as the manual steps: allow the site's hosts before anything else, or the
+widget and FAQ sections stay blank. A settings tool refused for a missing permission means the
+user reconnects HelpCenter.io and grants it; don't retry. The shared secret stays out of the
+conversation even then.
