@@ -1,0 +1,16 @@
+{
+  "name": "helpcenter-io",
+  "description": "The HelpCenter.io plugin: build and run a branded HelpCenter.io help center from Claude.",
+  "owner": {
+    "name": "HelpCenter.io",
+    "email": "support@helpcenter.io",
+    "url": "https://helpcenter.io"
+  },
+  "plugins": [
+    {
+      "name": "helpcenter-io",
+      "source": "./",
+      "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, find answers, draft and stage articles, and find content gaps."
+    }
+  ]
+}

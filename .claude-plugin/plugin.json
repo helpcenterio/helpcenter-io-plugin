@@ -1,5 +1,6 @@
 {
   "name": "helpcenter-io",
+  "displayName": "HelpCenter.io",
   "version": "1.2.0",
   "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, find answers in your articles, draft and stage content, and find content gaps from analytics.",
   "author": {
@@ -18,5 +19,10 @@
     "theme",
     "design",
     "mcp"
-  ]
+  ],
+  "icon": "./assets/logo.png",
+  "documentationUrl": "https://developers.helpcenter.io/content/connect-an-ai-assistant-to-your-help-center",
+  "supportUrl": "https://self.helpcenter.io",
+  "privacyPolicyUrl": "https://helpcenter.io/legal/privacy",
+  "termsOfServiceUrl": "https://helpcenter.io/legal/terms"
 }
