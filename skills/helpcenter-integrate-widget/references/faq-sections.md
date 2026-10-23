@@ -99,9 +99,13 @@ gives:
 <div class="hc-faq-section" data-id="KEY" data-type="custom"></div>
 ```
 
-`data-type` is `custom` or `full`, as the snippet has it. Put it where the block belongs;
-it fills the width of its container. In JSX the attribute is `className`. The page needs the
-loader (install-recipes.md). On a page that should show FAQs but no floating widget, set
+`data-type` is `custom` or `full`, as the snippet has it. Put it where the block belongs.
+The block takes the width of its container, and designs such as `slate` (the default) center
+their questions in a column at most 720px wide inside it, so on a wider page column the
+questions sit indented against the page's own heading. Put it in a container about that
+wide, or let the section show its own title (`show_heading: true`) so title and questions
+line up. In JSX the attribute is `className`. The page needs the loader
+(install-recipes.md). On a page that should show FAQs but no floating widget, set
 `widgetEnabled: false` in that page's `hcOptions`. `lang` shows the section in another of
 the help center's languages, with the entries translated into it.
 

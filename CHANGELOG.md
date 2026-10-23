@@ -26,8 +26,13 @@ Adding help to a website now does the HelpCenter.io side too.
   allowed hosts as the embedding check, before anything is tested in a browser.
 - Corrected for the platform as it is now: a leading dot in a FAQ section's Display on URLs
   covers subdomains, `*.example.com` is saved as `.example.com`, wildcards over shared
-  platform domains are refused, and an unpublished help center's FAQ sections load nowhere
-  else (403 `SITE_NOT_PUBLISHED`).
+  platform domains are refused, an unpublished help center's FAQ sections load nowhere
+  else (403 `SITE_NOT_PUBLISHED`), and the default FAQ design centers its questions in a
+  column at most 720px wide.
+- Tested by fresh Claude Code sessions with only this plugin and connector 2.2.0, on a static
+  site, a React single-page app and a Next.js app with sign-in. Each one allowed its own
+  hosts; the two with FAQ sections created a Custom section on the same hosts and filled it
+  with FAQs it wrote; each was then checked in a browser on `localhost`.
 
 ## 1.4.0 (2026-10-21)
 
