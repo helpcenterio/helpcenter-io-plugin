@@ -4,6 +4,31 @@ All notable changes to the HelpCenter.io plugin. Versions apply to both the Clau
 (`.claude-plugin/plugin.json`) and the ChatGPT plugin (`openai/plugin.json`), which share
 one set of skills.
 
+## 1.5.0 (2026-10-23)
+
+Adding help to a website now does the HelpCenter.io side too.
+
+- **helpcenter-integrate-widget** uses the connector's widget and FAQ-section tools
+  (connector 2.2.0) for the steps it used to hand to the user. It reads the widget's install
+  code and whether visitors are served (`helpcenter_get_widget_install`), adds the site's
+  hosts to the allowed websites once the user agrees (`helpcenter_update_embedding_origins`),
+  and creates the FAQ section with the same hosts, writes its FAQ entries and adds them
+  (`helpcenter_create_faq_section`, `helpcenter_add_faq_section_articles` and the rest), in
+  that order. It decides by the tools it actually has, not by a version, and keeps the
+  dashboard path for connections without them or without the permission.
+- What stays with the user: publishing the help center, the widget's appearance, proactive
+  messages, a FAQ section's custom CSS, FAQ import from a URL, and single sign-on with its
+  secret. The hand-off lists only those.
+- Allowing websites needs an Owner or Admin and a new permission ("Choose which websites may
+  embed your help center"). A connection made before it existed reconnects once; the skill
+  says so instead of retrying.
+- Verification reads `visitors.served` and its `reason` as the published check, and the
+  allowed hosts as the embedding check, before anything is tested in a browser.
+- Corrected for the platform as it is now: a leading dot in a FAQ section's Display on URLs
+  covers subdomains, `*.example.com` is saved as `.example.com`, wildcards over shared
+  platform domains are refused, and an unpublished help center's FAQ sections load nowhere
+  else (403 `SITE_NOT_PUBLISHED`).
+
 ## 1.4.0 (2026-10-21)
 
 Add help to a client's website in minutes.

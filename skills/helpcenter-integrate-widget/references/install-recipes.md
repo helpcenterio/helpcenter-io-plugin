@@ -16,8 +16,9 @@ need the `Window` declaration from there.
 
 ## Plain HTML
 
-The dashboard's snippet, right before `</body>` on every page (in `<head>` it fails, because
-`document.body` doesn't exist yet):
+The dashboard's snippet (`install_snippet` from `helpcenter_get_widget_install` is the same
+string), right before `</body>` on every page (in `<head>` it fails, because `document.body`
+doesn't exist yet):
 
 ```html
 <!-- HelpCenter.io smart widget code -->

@@ -45,8 +45,8 @@ exact place to paste it.
 - **The widget**, loaded once, with its own button if the design has one, the right
   articles for each page of an app, and links in the page that open articles inside it.
 - **FAQ sections** placed inline on the page. Claude writes the questions and answers into
-  the help center from the client's material, so the section has content the day it goes
-  live.
+  the help center from the client's material, creates the section with the client's hosts
+  and fills it, so the section has content the day it goes live.
 - **Single sign-on** for a private help center: the server-side token endpoint and the
   Login URL, so the client's signed-in customers read it without a second login. The shared
   secret stays in the server's environment; Claude never asks for it.
@@ -55,10 +55,14 @@ exact place to paste it.
 - **Content Security Policy** updated with only the sources the widget needs, and a
   verification pass in the browser when Claude can drive one.
 
-A few steps live in the HelpCenter.io dashboard and no tool can do them yet: copying the
-widget ID, allowing the site's hosts, creating FAQ sections, switching on proactive messages
-and generating the single sign-on secret. Claude does the code and hands you a short checklist
-for those, with the exact values filled in.
+Claude also does the HelpCenter.io side through the connector: it reads the widget's install
+code, adds the site's hosts to the allowed websites once you agree, creates the FAQ section
+and checks whether visitors are being served. A few steps stay in the dashboard: publishing
+the help center, the widget's appearance, proactive messages and the single sign-on secret.
+Claude hands you a short checklist for those, with the exact values filled in. Adding allowed
+websites needs an Owner or Admin and its own permission ("Choose which websites may embed
+your help center"); if you connected HelpCenter.io before it existed, reconnect once to grant
+it.
 
 The same plugin also helps you run the help center day to day: answer questions from your
 articles, draft and stage article changes, and find content gaps from search analytics and
@@ -68,8 +72,8 @@ reader feedback.
 
 - A [HelpCenter.io](https://helpcenter.io) help center on the **Growth** or **Catalyst**
   plan (the connector is part of those plans). Design work needs a v2 help center, which every new
-  help center is. Adding the widget and FAQ sections to a website works on every plan; only
-  writing FAQ entries for them uses the connector. Single sign-on needs Catalyst.
+  help center is. The widget and FAQ sections work on every plan; setting them up and
+  writing their FAQ entries through Claude uses the connector. Single sign-on needs Catalyst.
 - Claude (claude.ai, Claude Desktop, Cowork) or Claude Code. Adding the widget to a
   website's code is best done in Claude Code, in the site's project.
 
@@ -138,7 +142,7 @@ Running the help center:
 | Skill | What it does |
 |---|---|
 | **helpcenter-build-templates** | Designs and builds the help center's look: a whole theme from a brief, or a targeted change. Ships with a design method, a component catalog, token and contrast rules, CSS recipes and a quality checklist. |
-| **helpcenter-integrate-widget** | Adds the widget, FAQ sections, article links, proactive-message events and JWT single sign-on to a website's own code, for plain HTML, Next.js, React, Vue/Nuxt, Laravel, Rails, Django and website builders. Writes FAQ entries through the connector, checks the result, and lists the dashboard steps left for you. |
+| **helpcenter-integrate-widget** | Adds the widget, FAQ sections, article links, proactive-message events and JWT single sign-on to a website's own code, for plain HTML, Next.js, React, Vue/Nuxt, Laravel, Rails, Django and website builders. Through the connector, allows the site's hosts, creates FAQ sections and writes their entries, checks the result, and lists the few dashboard steps left for you. |
 | helpcenter-get-started | Connects, lists the help centers the connection can reach, and links to their dashboards. |
 | helpcenter-find-knowledge | Searches and reads articles to answer questions, with links to the sources. |
 | helpcenter-maintain-articles | Drafts, stages, publishes and organises articles and categories, imports in bulk, adds images. |

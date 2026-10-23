@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "helpcenter-io",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Build and maintain your HelpCenter.io knowledge base: answers, articles, templates, and content insights.",
   "author": {
     "name": "HelpCenter.io",
@@ -21,7 +21,7 @@
       "interface": {
         "displayName": "HelpCenter.io",
         "shortDescription": "Build and manage a help center",
-        "longDescription": "Build and maintain your HelpCenter.io help center in conversation. Find answers in existing articles, draft documentation, stage edits for review, organize categories, and identify content gaps from analytics. Build or refine your help center’s visual template, branding, page layouts, navigation, and theme as a draft in the Template Editor. Get the code to add the help widget, FAQ sections and single sign-on to your website, with FAQ entries written for you and a checklist of the dashboard steps that remain. Review reader comments and private editorial notes when you grant the relevant permissions. Connect through OAuth and choose the help center and permissions to share; design access is separate from content access. Published changes and public replies take effect immediately. Keep content and template edits as drafts until you are ready to release them.",
+        "longDescription": "Build and maintain your HelpCenter.io help center in conversation. Find answers in existing articles, draft documentation, stage edits for review, organize categories, and identify content gaps from analytics. Build or refine your help center’s visual template, branding, page layouts, navigation, and theme as a draft in the Template Editor. Add the help widget, FAQ sections and single sign-on to your website: the plugin writes the code, allows your website's hosts, creates the FAQ section and writes its entries, and lists the few dashboard steps that remain. Review reader comments and private editorial notes when you grant the relevant permissions. Connect through OAuth and choose the help center and permissions to share; design access is separate from content access. Published changes and public replies take effect immediately. Keep content and template edits as drafts until you are ready to release them.",
         "developerName": "HelpCenter Solutions",
         "category": "Productivity",
         "capabilities": [
@@ -49,7 +49,7 @@
       },
       "onboardingSkill": "./skills/helpcenter-get-started/SKILL.md",
       "publication": {
-        "release_notes": "New: add help to your website. The plugin writes the code that adds the HelpCenter.io widget, inline FAQ sections and single sign-on to a website or web app (plain HTML, Next.js, React, Vue and Nuxt, Laravel, Rails, Django, WordPress, and paste-in steps for Webflow, Wix, Shopify and Squarespace), drafts the FAQ entries in your help center, and lists the dashboard steps that remain: the widget ID, allowed websites, FAQ sections, proactive messages and the sign-on secret. Shared secrets are never asked for."
+        "release_notes": "Adding help to your website now does the HelpCenter.io side too. Besides writing the code for the widget, FAQ sections and single sign-on, the plugin reads your widget's install code, adds your website to the help center's allowed websites (with your agreement), creates the FAQ section, fills it with the FAQ entries it writes, and checks whether visitors are being served. What remains for you: publishing the help center, the widget's appearance, proactive messages and the sign-on secret. Adding allowed websites needs a new permission: reconnect HelpCenter.io once to grant it. Shared secrets are never asked for."
       }
     }
   }

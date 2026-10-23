@@ -85,9 +85,10 @@ the pages that carry the widget, or tell the user.
 
 The widget checks the host of the page it sits on against Embedding origins: hosts only,
 ports ignored, exact matches, a leading dot for a domain and its subdomains, an empty list
-blocks everything. FAQ sections use their own list, Display on URLs (exact hosts, no
-wildcards). dashboard-steps.md has the user's steps. Collect every host the site runs on, and
-avoid a leading dot on a shared platform domain.
+blocks everything. FAQ sections use their own list, Display on URLs, matched the same way.
+Collect every host the site runs on, and add them with `helpcenter_update_embedding_origins`
+when your tool list has it (dashboard-steps.md has the user's steps otherwise). A leading dot
+over a shared platform domain is refused: list the exact host there.
 
 ## The whole help center on a page (embed.js)
 

@@ -1,8 +1,21 @@
-# Dashboard steps the user does
+# Dashboard steps
 
-No HelpCenter.io tool can do these yet. Hand them to the user as a short checklist, with
-the exact values filled in (hosts, event names, the token route), and only the steps the
-task still needs. They need an Owner or Admin of the help center.
+Each step below is what the user does in the HelpCenter.io dashboard. Four of them have a
+connector tool, named under the step's heading: when that tool is in your tool list, do the
+step yourself (with the user's agreement for settings) and skip it in the hand-off. Hand the
+user the manual path when the tool is missing from your list or refused for a permission.
+The rest have no tool.
+
+Hand the user what's left as a short checklist, with the exact values filled in (hosts,
+event names, the token route), and only the steps the task still needs. They need an Owner
+or Admin of the help center.
+
+| Step | Tool |
+|---|---|
+| Copy the widget ID | `helpcenter_get_widget_install` |
+| Add the site's hosts to Embedding origins | `helpcenter_update_embedding_origins` |
+| Create a FAQ section, pick its FAQs | `helpcenter_create_faq_section`, `helpcenter_add_faq_section_articles` and the other FAQ-section tools |
+| Publish, widget appearance, proactive messages, single sign-on, AI Answers, contact recipient, a section's custom CSS, FAQ import from a URL | None: always the user |
 
 ## Dashboard links
 
@@ -23,12 +36,27 @@ The Proactive messages tab sits beside the other two on Embeddables.
 ## The steps
 
 ### Copy the widget ID
+**With the connector:** `helpcenter_get_widget_install` returns `install_snippet` (byte for
+byte what the dashboard shows), `app_id`, the current `embedding_origins`, whether the widget
+has been seen running (`installed`, `last_seen_at`), whether visitors are served
+(`visitors.served`, `reason`) and what the plan includes (`entitlements`). The first call
+creates the widget if the help center has none yet, as opening the dashboard page does.
+
 Embeddables → Widget → **Installation** card ("Paste this snippet before the closing
 </body> tag of your site.") → **Copy**. The snippet holds `app_id: '…'`, five characters.
 One help center has one widget and one ID. The user can send you the ID or the whole
 snippet; neither is secret.
 
 ### Add the site's hosts to Embedding origins
+**With the connector:** `helpcenter_update_embedding_origins` with
+`add: ["www.example.com", "example.com", "localhost"]`, after the user agrees to the list.
+`add` and `remove` change only the entries they name; `replace` sets the whole list, so use
+it only when the user asks for exactly that. The result lists `added`, `removed`, `not_listed`
+and the new `frame_ancestors` header. It needs `embed.manage` and an Owner or Admin. Refused
+entries come back as a validation error naming the entry: fix it (the exact host instead of a
+wildcard) rather than retrying. Leaving the list empty needs `allow_block_all: true`, and
+that stops the widget everywhere. At most 50 entries.
+
 Embeddables → Widget → **Configuration** → **Embedding origins** (the same list as Settings →
 General → Embedding origins) → type a host → **Add** → **Save changes**.
 
@@ -37,10 +65,12 @@ General → Embedding origins) → type a host → **Add** → **Save changes**.
 - `example.com` and `www.example.com` are different entries. List both when both serve
   pages.
 - A leading dot covers a domain and all its subdomains: `.example.com`. `*.example.com` is
-  not recognised.
-- Don't use a leading dot on a shared platform domain (`.vercel.app`, `.netlify.app`,
-  `.myshopify.com`, `.webflow.io`, `.wixsite.com`, `.github.io`): that lets every site on
-  the platform show the help center. List the exact preview or store host instead.
+  saved as `.example.com`.
+- Refused: `*`, a leading dot over a top-level or country domain (`.com`, `.co.uk`) and over
+  a shared platform domain (`.vercel.app`, `.netlify.app`, `.myshopify.com`, `.webflow.io`,
+  `.wixsite.com`, `.github.io`, `.pages.dev` and others), which would let every site on the
+  platform show the help center. List the exact preview or store host instead
+  (`acme.vercel.app`). Entries already on the list are kept as they are.
 - An empty list blocks every site. Changes can take a couple of minutes to reach visitors.
 - The list decides where the help center may appear, not who may read it. Reading is
   controlled by making the help center Private and signing readers in.
@@ -49,11 +79,24 @@ Give the user the exact list: production apex and `www`, staging, preview hosts,
 `localhost` for local development.
 
 ### Publish the help center
+No tool. `helpcenter_get_widget_install` tells you whether it's needed: `visitors.reason`
+`unpublished`.
+
 Settings → **Publishing** → **Publish help center**. Until then a public help center is
 open to its team only, and the widget shows visitors no articles. Publishing needs an
 active plan. A private help center doesn't need this step; it needs single sign-on.
 
 ### Create a FAQ section
+**With the connector:** `helpcenter_create_faq_section` with `type`, `title`, `display_urls`
+(the same hosts you allowed as Embedding origins) and optionally `template` (ids from
+`helpcenter_list_faq_sections`, `templates.ids`; a new section starts on `slate`), `design`
+and `show_heading`. For a Custom section, `helpcenter_add_faq_section_articles` with the ids of
+FAQ articles (type `faq`), then `helpcenter_reorder_faq_section_articles` or
+`helpcenter_remove_faq_section_article` as needed. Every section result carries
+`install_snippet`. Creating, updating and deleting sections needs an Admin or Owner; adding,
+removing and reordering FAQs an Editor or above. The order and details are in
+faq-sections.md. A section's custom CSS and importing FAQs from a URL stay in the dashboard.
+
 Embeddables → **FAQ sections** → **New section**:
 
 - **Section type**: "Full — all FAQs organized by category" shows every published FAQ entry,
@@ -61,9 +104,9 @@ Embeddables → **FAQ sections** → **New section**:
   shows only the entries chosen in Manage FAQs. The type can't be changed later.
 - **Section title**, optional **Section description**.
 - **Display on URLs**: the host names of the pages that show the section, separated by
-  commas. Exact hosts only: no leading dot, no wildcard, and `www.example.com` and
-  `example.com` are different. This is a separate list from Embedding origins. The help
-  center's own domain is always allowed.
+  commas. `www.example.com` and `example.com` are different; a leading dot (`.example.com`)
+  covers a domain and all its subdomains. This is a separate list from Embedding origins.
+  The help center's own domain is always allowed.
 - **Create and design** → pick one of the 27 designs. **Show title and description** off
   when the page already has its own heading for the FAQs.
 - For a Custom section: **Manage FAQs** → add the entries.
@@ -75,6 +118,8 @@ The section's "⋮" menu has **Preview** and **Open share page**
 (`https://<help center>/share/faqs/<KEY>`), which show the section on its own.
 
 ### Create proactive messages
+No tool.
+
 Embeddables → **Proactive messages** → **New message**:
 
 - **Message** tab: the text of the bubble.
@@ -89,6 +134,8 @@ Embeddables → **Proactive messages** → **New message**:
 Give the user the exact event names your code fires.
 
 ### Set up single sign-on (JWT)
+No tool, and none should carry the secret.
+
 Settings → **Single sign-on** (Catalyst plan) → **Enable Single Sign-On** → **JWT (HS256)**:
 
 - **Login URL** (required): the address of the sign-in endpoint you built, such as
@@ -113,9 +160,28 @@ The widget's built-in contact form needs a recipient email on the help center's 
 form. Without one the widget shows no contact option at all, unless the site's code
 handles contact itself (`onContactsRequest`, see widget-api.md).
 
+### Change how the widget looks
+No tool. Embeddables → Widget → **Configuration**: colours, launcher icon, heading, custom
+content and translations. The code can still hide the launcher and use the site's own button
+(`showButton: false`, widget-api.md).
+
 ## The hand-off message
 
-Keep it to the steps still open, in order, with values filled in. For example:
+Keep it to the steps still open, in order, with values filled in. With the connector's widget
+tools most of the dashboard half is done, so the message is short. For example:
+
+> Code's in place, and in HelpCenter.io I added `www.acme.com`, `acme.com` and `localhost`
+> to the allowed websites and created the "Billing questions" FAQ section with six FAQs
+> (drafts until you say so). Two things only you can do (Owner or Admin):
+>
+> 1. **Publish** the help center (Settings → Publishing): until then visitors see the
+>    launcher but no articles.
+> 2. **Proactive message** (Embeddables → Proactive messages → New message): a Custom event
+>    rule for `payment_failed`, then switch it on.
+>
+> Dashboard: https://helpcenter.io/app/sites/acme/widget
+
+Without those tools (or with the origins tool refused), the same task hands over more:
 
 > Code's in place. Three things only you can do in HelpCenter.io (Owner or Admin):
 >
@@ -128,15 +194,14 @@ Keep it to the steps still open, in order, with values filled in. For example:
 >
 > Dashboard: https://helpcenter.io/app/sites/acme/widget
 
-## Steps that API tools would remove
+## Steps still without a tool
 
 When the connector gains tools for these, the matching step moves from the user to you:
 
 | Step | What a tool would do |
 |---|---|
-| Copy the widget ID | Read the help center's widget ID |
-| Embedding origins | Read and add allowed hosts |
-| FAQ sections | Create a section, set Display on URLs, choose a design, attach FAQs, read its markup |
 | Proactive messages | Create messages and rules, switch them on |
+| Widget appearance | Colours, launcher icon, heading, custom content, translations |
+| FAQ section custom CSS, FAQ import from a URL | Edit the CSS, run the import |
 | Single sign-on | Read whether it's set up, set the Login URL, issuer, audience and TTL. The secret itself should still go from the dashboard to the server, never through the conversation |
 | Publishing, AI Answers, contact recipient | Read and change these settings |
