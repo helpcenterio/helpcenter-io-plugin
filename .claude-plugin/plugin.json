@@ -1,8 +1,8 @@
 {
   "name": "helpcenter-io",
   "displayName": "HelpCenter.io",
-  "version": "1.5.0",
-  "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, add the help widget, FAQ sections and single sign-on to a website's code, find answers in your articles, draft and stage content, and find content gaps from analytics.",
+  "version": "1.6.0",
+  "description": "Build and run a HelpCenter.io help center from Claude: design a branded theme from a short brief, start a help center for a client with no account and hand over the link that claims it, add the help widget, FAQ sections and single sign-on to a website's code, find answers in your articles, draft and stage content, and find content gaps from analytics.",
   "author": {
     "name": "HelpCenter.io",
     "email": "support@helpcenter.io",
@@ -20,6 +20,7 @@
     "design",
     "widget",
     "faq",
+    "migration",
     "mcp"
   ],
   "icon": "./assets/logo.png",

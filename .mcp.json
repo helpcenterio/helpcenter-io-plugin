@@ -3,6 +3,10 @@
     "helpcenter": {
       "type": "http",
       "url": "https://mcp.helpcenter.io"
+    },
+    "helpcenter-agent": {
+      "type": "http",
+      "url": "https://mcp.helpcenter.io/agent"
     }
   }
 }
