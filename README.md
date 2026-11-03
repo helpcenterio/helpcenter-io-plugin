@@ -103,6 +103,66 @@ When you connect, HelpCenter.io asks you to sign in and choose which help center
 permissions to share. Design access (reading and editing the template) is a separate
 permission from content access.
 
+## Connect from Cline and other MCP clients
+
+HelpCenter.io is a remote MCP server: there is nothing to install or build.
+
+- Server URL: `https://mcp.helpcenter.io`
+- Transport: streamable HTTP
+- Auth: OAuth 2.1 (your client opens a browser sign-in to HelpCenter.io), or an optional API
+  key sent as the header `Authorization: Bearer <API key>`. Create a key in **Settings → API
+  keys** of the help center it should work on; see
+  [Connect an AI assistant to your help center](https://developers.helpcenter.io/content/connect-an-ai-assistant-to-your-help-center).
+
+**Cline**
+
+In the Cline panel, open **MCP Servers** → **Remote Servers**, enter a Server Name (for
+example `helpcenter-io`), Server URL `https://mcp.helpcenter.io`, choose **Streamable HTTP**
+and click **Add Server**. Or add it to `cline_mcp_settings.json` (MCP Servers → Configure →
+Configure MCP Servers; for Cline CLI, `~/.cline/data/settings/cline_mcp_settings.json`):
+
+```json
+{
+  "mcpServers": {
+    "helpcenter-io": {
+      "type": "streamableHttp",
+      "url": "https://mcp.helpcenter.io",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+Set `"type": "streamableHttp"` explicitly; without it Cline uses the legacy SSE transport.
+To sign in with OAuth in Cline CLI, run `cline mcp` and choose **Authorize OAuth**. To use an
+API key instead, add `"headers": { "Authorization": "Bearer <API key>" }` to the entry, or:
+
+```bash
+cline mcp add helpcenter-io https://mcp.helpcenter.io --transport http --header "Authorization: Bearer <API key>" --yes
+```
+
+**Other MCP clients**
+
+Any client that supports remote servers over streamable HTTP can use the same URL. With
+OAuth, leave out `headers` and the client starts the sign-in when the server answers `401`.
+
+```json
+{
+  "mcpServers": {
+    "helpcenter-io": {
+      "type": "http",
+      "url": "https://mcp.helpcenter.io",
+      "headers": { "Authorization": "Bearer <API key>" }
+    }
+  }
+}
+```
+
+To check it works, ask your assistant to list your help center's categories.
+
+Without an account, an AI agent can create a new help center or migrate an existing one, then hand its user a claim link to take ownership.
+
 ## Try it
 
 Building a theme:
