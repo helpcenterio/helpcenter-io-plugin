@@ -5,6 +5,8 @@ description: Set up a HelpCenter.io connection, identify the help center availab
 
 HelpCenter.io tools use the user's OAuth connection. Authentication belongs in the sign-in flow; never request passwords, API keys, access tokens, or verification codes in conversation.
 
+Tools that take an `agent_key` argument belong to HelpCenter.io's no-account endpoint, which builds a new help center for someone who has no account yet and hands them a link to claim it. For the help centers this connection reaches, use the tools without `agent_key`.
+
 Call `helpcenter_list_sites` to show the help centers granted to this connection. When it lists more than one, every other tool needs a `site_id` from that list on each call; nothing is remembered between calls, so a list of sites is evidence of access, not evidence that any one site is selected.
 
 Dashboard links use `https://helpcenter.io/app/sites/{subdomain}`, where `{subdomain}` is the site's exact `subdomain` returned by `helpcenter_list_sites` with `response_format: json`. Match the user's intended help center; do not infer this value from its name, numeric ID, custom public domain, or subfolder. Append `/articles` for the content dashboard, `/articles/{article_id}/edit` for an article editor, `/stats` for analytics, or `/settings` for site settings. Use actual article IDs. These links require HelpCenter.io sign-in and the user's dashboard permissions; OAuth access does not create dashboard membership. If the target's subdomain is missing or ambiguous, use the help center picker at `https://helpcenter.io/app/sites`. For reader-facing links, use the returned public `url` instead.

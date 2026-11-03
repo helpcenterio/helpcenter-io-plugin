@@ -1,33 +1,47 @@
 #!/usr/bin/env node
-// Fails when a skill names a HelpCenter.io tool the connector does not serve, or when the
-// Claude and ChatGPT manifests point at different servers.
+// Fails when a skill names a HelpCenter.io tool its server does not serve, or when the
+// Claude and ChatGPT manifests point the same server at different addresses.
 //
-//   node scripts/check-tool-names.mjs                 # against https://mcp.helpcenter.io
-//   node scripts/check-tool-names.mjs --tools tools.json   # against a saved tools/list result
+// Each skill is checked against one server in .mcp.json: `helpcenter` (the account
+// connector) unless scripts/skill-servers.mjs names another.
 //
-// tools/list needs no account: the connector lists its tools to any caller. The bearer
-// value below is a placeholder, not a credential.
+//   node scripts/check-tool-names.mjs                        # against the live servers
+//   node scripts/check-tool-names.mjs --tools tools.json     # `helpcenter` from a saved tools/list result
+//   node scripts/check-tool-names.mjs --tools helpcenter-agent=agent.json   # any server by name
+//
+// tools/list needs no account: both servers list their tools to any caller. The bearer
+// value below is a placeholder, not a credential, and the agent endpoint ignores it.
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { serverOf } from "./skill-servers.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const claudeMcp = JSON.parse(readFileSync(join(root, ".mcp.json"), "utf8"));
-const openaiMcp = JSON.parse(readFileSync(join(root, "openai", "mcp.json"), "utf8"));
-const serverUrl = claudeMcp.mcpServers.helpcenter.url;
+const claudeServers = JSON.parse(readFileSync(join(root, ".mcp.json"), "utf8")).mcpServers;
+const openaiServers = JSON.parse(readFileSync(join(root, "openai", "mcp.json"), "utf8")).mcpServers;
 
 const problems = [];
-if (openaiMcp.mcpServers.helpcenter.url !== serverUrl) {
-  problems.push(`openai/mcp.json points at ${openaiMcp.mcpServers.helpcenter.url}, .mcp.json at ${serverUrl}`);
+for (const [name, server] of Object.entries(openaiServers)) {
+  if (claudeServers[name]?.url !== server.url) {
+    problems.push(`openai/mcp.json points ${name} at ${server.url}, .mcp.json at ${claudeServers[name]?.url}`);
+  }
 }
 
-async function liveToolNames() {
-  const toolsArg = process.argv.indexOf("--tools");
-  if (toolsArg !== -1) {
-    const saved = JSON.parse(readFileSync(process.argv[toolsArg + 1], "utf8"));
+const savedTools = new Map();
+process.argv.forEach((arg, index) => {
+  if (arg === "--tools") {
+    const value = process.argv[index + 1];
+    const [name, file] = value.includes("=") ? value.split("=", 2) : ["helpcenter", value];
+    savedTools.set(name, file);
+  }
+});
+
+async function toolNames(name) {
+  if (savedTools.has(name)) {
+    const saved = JSON.parse(readFileSync(savedTools.get(name), "utf8"));
     return (saved.result?.tools ?? saved.tools ?? saved).map((tool) => tool.name);
   }
-  const response = await fetch(serverUrl, {
+  const response = await fetch(claudeServers[name].url, {
     method: "POST",
     headers: {
       Authorization: "Bearer tools-list",
@@ -57,13 +71,25 @@ function markdownFiles(directory) {
   });
 }
 
-const known = new Set(await liveToolNames());
-let mentions = 0;
-for (const file of markdownFiles(join(root, "skills"))) {
-  for (const name of new Set(readFileSync(file, "utf8").match(/helpcenter_[a-z_]+/g) ?? [])) {
-    mentions += 1;
-    if (!known.has(name)) {
-      problems.push(`${relative(root, file)} names ${name}, which ${serverUrl} does not serve`);
+const known = new Map();
+const mentions = new Map();
+const skills = readdirSync(join(root, "skills"), { withFileTypes: true }).filter((entry) => entry.isDirectory());
+for (const { name: skill } of skills) {
+  const name = serverOf(skill);
+  if (!claudeServers[name]) {
+    problems.push(`skills/${skill} uses ${name}, which .mcp.json does not name`);
+    continue;
+  }
+  if (!known.has(name)) {
+    known.set(name, new Set(await toolNames(name)));
+    mentions.set(name, 0);
+  }
+  for (const file of markdownFiles(join(root, "skills", skill))) {
+    for (const tool of new Set(readFileSync(file, "utf8").match(/helpcenter_[a-z_]+/g) ?? [])) {
+      mentions.set(name, mentions.get(name) + 1);
+      if (!known.get(name).has(tool)) {
+        problems.push(`${relative(root, file)} names ${tool}, which ${claudeServers[name].url} does not serve`);
+      }
     }
   }
 }
@@ -72,4 +98,8 @@ if (problems.length > 0) {
   console.error(problems.join("\n"));
   process.exit(1);
 }
-console.log(`OK: ${mentions} tool mentions across the skills, all among the ${known.size} tools ${serverUrl} serves.`);
+for (const [name, tools] of known) {
+  console.log(
+    `OK: ${mentions.get(name)} tool mentions in the ${name} skills, all among the ${tools.size} tools ${claudeServers[name].url} serves.`,
+  );
+}

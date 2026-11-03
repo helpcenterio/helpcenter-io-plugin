@@ -11,6 +11,12 @@ the HelpCenter.io widget, FAQ sections and single sign-on to the site's own code
 and hands you the few dashboard steps that are left. See
 [Add help to a client's site in minutes](#add-help-to-a-clients-site-in-minutes).
 
+**No HelpCenter.io account yet? Claude can start the help center for you.** It creates a
+private help center, imports the client's knowledge base from Zendesk, Intercom, Document360,
+Help Scout, Front or HelpDocs (or writes it from what you give it), brands it, and hands you
+one link the client claims it with. See
+[Start a help center with no account](#start-a-help-center-with-no-account).
+
 ![Three help centers designed by Claude from one-paragraph briefs: a dark fintech theme, a playful consumer app and enterprise developer docs](docs/showcase/showcase-strip.webp)
 
 ### Built from a brief, by Claude, with nothing but this plugin
@@ -64,6 +70,33 @@ websites needs an Owner or Admin and its own permission ("Choose which websites 
 your help center"); if you connected HelpCenter.io before it existed, reconnect once to grant
 it.
 
+## Start a help center with no account
+
+Ask Claude to set up a help center for a client, or to move their existing one to
+HelpCenter.io, and it does the whole build before anyone has an account. It uses HelpCenter.io's
+no-account endpoint, `https://mcp.helpcenter.io/agent`, which the plugin connects as a second
+server, `helpcenter-agent`. That server needs no sign-in.
+
+- **It creates the help center** private and hidden from search engines, on a temporary
+  address. It stays that way until the client claims it and publishes it.
+- **It fills it**: an import of a public Zendesk Guide, Intercom, Document360, Help Scout
+  Docs, Front Knowledge Base or HelpDocs help center, or the categories and articles you give
+  it, up to 500 articles.
+- **It brands it** with the same design skill as above, then checks the result through a
+  preview link, page by page, as a reader would.
+- **It hands you the claim link.** The client signs up (or signs in), verifies their email
+  address and takes the help center over; publishing it needs a plan. A help center nobody
+  claims is deleted after 7 days.
+- **Bigger moves go to HelpCenter.io's migration team**: over 500 articles, several knowledge
+  bases at once, or a source behind a sign-in. Claude files the request with the client's
+  email address, after asking you for it, and the team moves it within a day.
+- **After the claim**, Claude can add the redirects that keep the old help center's links
+  working and connect the client's own domain, once the client has verified their email
+  address and chosen a plan.
+
+The help center's key stays in Claude's tool calls: it is never shown, and never written into
+a file or a commit. The ChatGPT plugin does not include this skill.
+
 The same plugin also helps you run the help center day to day: answer questions from your
 articles, draft and stage article changes, and find content gaps from search analytics and
 reader feedback.
@@ -74,6 +107,8 @@ reader feedback.
   plan (the connector is part of those plans). Design work needs a v2 help center, which every new
   help center is. The widget and FAQ sections work on every plan; setting them up and
   writing their FAQ entries through Claude uses the connector. Single sign-on needs Catalyst.
+- Starting a help center for someone with no account needs no account and no plan: the
+  person who claims it chooses one before publishing.
 - Claude (claude.ai, Claude Desktop, Cowork) or Claude Code. Adding the widget to a
   website's code is best done in Claude Code, in the site's project.
 
@@ -97,7 +132,8 @@ account. To install it straight from this repository instead:
 
 (On Claude Code before 2.1.275: `/plugin marketplace add helpcenterio/helpcenter-io-plugin`,
 then `/plugin install helpcenter-io@helpcenter-io`.) Then run `/mcp`, choose the
-HelpCenter.io server and sign in.
+HelpCenter.io server and sign in. The plugin's second server, `helpcenter-agent`, is the
+no-account endpoint and needs no sign-in.
 
 When you connect, HelpCenter.io asks you to sign in and choose which help center and which
 permissions to share. Design access (reading and editing the template) is a separate
@@ -161,7 +197,27 @@ OAuth, leave out `headers` and the client starts the sign-in when the server ans
 
 To check it works, ask your assistant to list your help center's categories.
 
-Without an account, an AI agent can create a new help center or migrate an existing one, then hand its user a claim link to take ownership.
+**Without an account**
+
+`https://mcp.helpcenter.io/agent` is HelpCenter.io's no-account endpoint. Through it an AI
+agent creates a new help center for its user, fills or imports it, checks it with a preview
+link, and hands the user a link to claim it. It takes no sign-in and no headers: every tool
+that acts on the help center takes the key the create tool returns as its `agent_key`
+argument. Add it beside the server above (in Cline, with `"type": "streamableHttp"`):
+
+```json
+{
+  "mcpServers": {
+    "helpcenter-io-agent": {
+      "type": "http",
+      "url": "https://mcp.helpcenter.io/agent"
+    }
+  }
+}
+```
+
+See [Migrate a knowledge base as an AI agent](https://developers.helpcenter.io/content/migrate-a-knowledge-base-as-an-ai-agent)
+for the limits and the steps after the claim.
 
 ## Try it
 
@@ -188,6 +244,15 @@ Adding help to a website (in Claude Code, in the site's project):
 > Replace the floating launcher with the Help button in our header, show the Billing articles
 > on /billing, and fire an event when an export fails so we can set up a proactive message.
 
+Starting a help center with no account:
+
+> My client Brightloom has no HelpCenter.io account. Move their Zendesk help center at
+> help.brightloom.app to HelpCenter.io, brand it violet like their website, and give me the
+> link they claim it with.
+
+> Start a help center for our new product from these five articles and give me the claim
+> link.
+
 Running the help center:
 
 > Find our articles about refunds and summarise the policy with links to the sources.
@@ -203,12 +268,15 @@ Running the help center:
 |---|---|
 | **helpcenter-build-templates** | Designs and builds the help center's look: a whole theme from a brief, or a targeted change. Ships with a design method, a component catalog, token and contrast rules, CSS recipes and a quality checklist. |
 | **helpcenter-integrate-widget** | Adds the widget, FAQ sections, article links, proactive-message events and JWT single sign-on to a website's own code, for plain HTML, Next.js, React, Vue/Nuxt, Laravel, Rails, Django and website builders. Through the connector, allows the site's hosts, creates FAQ sections and writes their entries, checks the result, and lists the few dashboard steps left for you. |
+| **helpcenter-create-help-center** | Starts a help center for someone with no HelpCenter.io account: creates it, imports or writes the content, brands it, checks the preview and hands over the claim link. Files a migration request for bigger moves, and after the claim adds redirects from the old help center and the custom domain. Claude only. |
 | helpcenter-get-started | Connects, lists the help centers the connection can reach, and links to their dashboards. |
 | helpcenter-find-knowledge | Searches and reads articles to answer questions, with links to the sources. |
 | helpcenter-maintain-articles | Drafts, stages, publishes and organises articles and categories, imports in bulk, adds images. |
 | helpcenter-improve-content | Turns failed searches, article performance and reader feedback into content recommendations. |
 
 The skills drive the tools of the HelpCenter.io connector at `https://mcp.helpcenter.io`.
+helpcenter-create-help-center drives its no-account endpoint, `https://mcp.helpcenter.io/agent`,
+the plugin's second server: its tools have the same names and take an `agent_key` argument.
 helpcenter-integrate-widget works mostly in your project's files and needs the connector only
 to look up categories and articles or write FAQ entries.
 The plugin points at the same server as the standalone HelpCenter.io connector, so if you
@@ -223,6 +291,10 @@ have both you see one set of tools.
   draft's layout; the skill tells you what will be replaced and waits for your agreement.
 - **Articles stay unpublished by default.** New articles are drafts, and edits to published
   articles are staged for review unless you ask for a live change.
+- **A help center started with no account stays private.** It is hidden from search engines
+  until the person who claims it publishes it; Claude cannot publish it, and never claims it.
+  Its key stays inside Claude's tool calls, and a migration request sends an email address
+  only after you give it to Claude.
 - **No scripts unless you ask.** The skill adds tracking or widget scripts to your help
   center only when you request that specific code.
 - **Secrets stay on your server.** For single sign-on, Claude reads the shared secret from
@@ -237,9 +309,13 @@ have both you see one set of tools.
 ## Data and privacy
 
 The plugin itself runs no code and stores nothing. Its skills are instructions for Claude.
-Claude talks to one service: the HelpCenter.io connector at `https://mcp.helpcenter.io`,
+Claude talks to one service, HelpCenter.io: the connector at `https://mcp.helpcenter.io`,
 which acts on the help centers and permissions you grant when you connect (sign-in is OAuth
-through HelpCenter.io; you can revoke it any time from your HelpCenter.io account). When you
+through HelpCenter.io; you can revoke it any time from your HelpCenter.io account), and its
+no-account endpoint at `https://mcp.helpcenter.io/agent`, which needs no sign-in and acts only
+on the help centers Claude creates through it. A migration request sends the email address you
+give Claude to HelpCenter.io's migration team
+([how it is used](https://helpcenter.io/legal/privacy#agent-migrations)). When you
 ask for the widget on a website, Claude writes code into your project that loads it from
 `https://helpcenter.io` for your visitors, and may request HelpCenter.io's public widget
 addresses (`https://embed.helpcenter.io`) from your terminal to check the result. See the
@@ -256,12 +332,12 @@ addresses (`https://embed.helpcenter.io`) from your terminal to check the result
 
 | Path | Purpose |
 |---|---|
-| `.claude-plugin/plugin.json`, `.mcp.json` | The Claude plugin manifest and its connector reference. |
-| `skills/` | The six skills, shared by Claude and ChatGPT. |
+| `.claude-plugin/plugin.json`, `.mcp.json` | The Claude plugin manifest and its two servers: `helpcenter` (the connector) and `helpcenter-agent` (its no-account endpoint). |
+| `skills/` | The seven skills. ChatGPT gets all but helpcenter-create-help-center, whose server its package does not name. |
 | `openai/` | The same plugin's manifest for ChatGPT's Plugin Directory. Claude ignores it. |
 | assets | Icon and logo. |
 | docs/showcase | Screenshots of themes built by the skill. |
-| `scripts/` | Maintainer tools, not part of the plugin: `check-tool-names.mjs` checks every tool a skill names against the live connector; `package-chatgpt.mjs` builds the ChatGPT package. |
+| `scripts/` | Maintainer tools, not part of the plugin: `check-tool-names.mjs` checks every tool a skill names against the live server it uses (`skill-servers.mjs` says which); `package-chatgpt.mjs` builds the ChatGPT package. |
 
 ## License
 

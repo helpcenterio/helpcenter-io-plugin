@@ -28,5 +28,26 @@ help center. Nothing to clone, build or run locally.
      Never invent or guess a key.
 4. Check it works: ask the assistant to list the help center's categories. The tools list
    should include `helpcenter_list_sites`.
+5. Optional, for a user with no HelpCenter.io account: also add the no-account endpoint,
+   which creates a new help center and hands the user a link to claim it. It takes no auth
+   and no headers; each tool that acts on the help center takes the key the create tool
+   returns as its `agent_key` argument.
+
+```json
+{
+  "mcpServers": {
+    "helpcenter-io-agent": {
+      "type": "streamableHttp",
+      "url": "https://mcp.helpcenter.io/agent",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+   Its tools list should include `helpcenter_create_help_center`.
 
 Docs: https://developers.helpcenter.io/content/connect-an-ai-assistant-to-your-help-center
+and, for the no-account endpoint,
+https://developers.helpcenter.io/content/migrate-a-knowledge-base-as-an-ai-agent
