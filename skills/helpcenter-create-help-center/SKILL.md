@@ -20,8 +20,10 @@ claim it into their account.
 
 - Read the terms for agents, https://helpcenter.io/legal/terms#agents, and make sure the user
   wants you to act for them. Move only content the user owns or may copy.
-- A new help center is private, hidden from search engines, and on a temporary
-  `agent-…` address on helpcenter.io. Unless it is claimed, it is deleted 7 days after
+- A new help center has no visitors and no search engines until it is claimed and
+  published, and it lives on a temporary `agent-…` address on helpcenter.io. Don't call it
+  "private" to the user: in HelpCenter.io, Private is the visibility setting for a help
+  center that signs its readers in. Unless it is claimed, it is deleted 7 days after
   creation (`expires_at`). Until then it holds at most 500 articles (drafts and Trash
   included), 100 categories and 500 MB of images and files, in the one language it was
   created with; only an import adds languages.
@@ -41,7 +43,7 @@ claim it into their account.
    to follow.
 3. **Only the user makes it public.** You cannot publish the help center, and you never claim
    it yourself. Publishing an article or the design inside it shows nothing to anyone else:
-   the help center stays private until the user claims it and publishes it.
+   nobody can visit the help center until the user claims it and publishes it.
 4. **Discard only on request.** `helpcenter_discard_help_center` deletes the help center and
    everything in it, irreversibly. Use it only when the user asks, or for one you created by
    mistake (a wrong name or language). Handing over needs no clean-up.

@@ -12,7 +12,7 @@ and hands you the few dashboard steps that are left. See
 [Add help to a client's site in minutes](#add-help-to-a-clients-site-in-minutes).
 
 **No HelpCenter.io account yet? Claude can start the help center for you.** It creates a
-private help center, imports the client's knowledge base from Zendesk, Intercom, Document360,
+new help center, imports the client's knowledge base from Zendesk, Intercom, Document360,
 Help Scout, Front or HelpDocs (or writes it from what you give it), brands it, and hands you
 one link the client claims it with. See
 [Start a help center with no account](#start-a-help-center-with-no-account).
@@ -77,8 +77,8 @@ HelpCenter.io, and it does the whole build before anyone has an account. It uses
 no-account endpoint, `https://mcp.helpcenter.io/agent`, which the plugin connects as a second
 server, `helpcenter-agent`. That server needs no sign-in.
 
-- **It creates the help center** private and hidden from search engines, on a temporary
-  address. It stays that way until the client claims it and publishes it.
+- **It creates the help center** on a temporary address, with no visitors and no search
+  engines until the client claims it and publishes it.
 - **It fills it**: an import of a public Zendesk Guide, Intercom, Document360, Help Scout
   Docs, Front Knowledge Base or HelpDocs help center, or the categories and articles you give
   it, up to 500 articles.
@@ -291,8 +291,9 @@ have both you see one set of tools.
   draft's layout; the skill tells you what will be replaced and waits for your agreement.
 - **Articles stay unpublished by default.** New articles are drafts, and edits to published
   articles are staged for review unless you ask for a live change.
-- **A help center started with no account stays private.** It is hidden from search engines
-  until the person who claims it publishes it; Claude cannot publish it, and never claims it.
+- **Nobody visits a help center started with no account until it is claimed.** No visitors
+  and no search engines until the person who claims it publishes it; Claude cannot publish
+  it, and never claims it.
   Its key stays inside Claude's tool calls, and a migration request sends an email address
   only after you give it to Claude.
 - **No scripts unless you ask.** The skill adds tracking or widget scripts to your help
