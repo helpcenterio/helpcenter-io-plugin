@@ -12,16 +12,16 @@ Start a help center for someone with no HelpCenter.io account.
 - **The plugin connects a second server**, `helpcenter-agent`: the connector's no-account
   endpoint, `https://mcp.helpcenter.io/agent`, live since 2026-11-03. It needs no sign-in.
   Its tools have the account tools' names and take an `agent_key` argument.
-- **helpcenter-create-help-center**, a new skill on that server. It creates a private help
-  center, fills it (an import of a public Zendesk, Intercom, Document360, Help Scout, Front
+- **helpcenter-create-help-center**, a new skill on that server. It creates a help center,
+  fills it (an import of a public Zendesk, Intercom, Document360, Help Scout, Front
   or HelpDocs help center, or the articles the user gives it, up to 500), brands it with
   helpcenter-build-templates, checks it through the preview link and hands over the claim
   link. Larger moves become a migration request, after the user gives the email address it
   needs. A reference covers what comes after the claim: the redirect map, redirects and the
   custom domain.
 - **What the skill corrects for.** The preview link and the claim page show the published
-  design and published articles only, so the skill publishes the design inside the private
-  help center once it is checked, writes articles that are live at the source as published,
+  design and published articles only, so the skill publishes the design inside the new help
+  center once it is checked, writes articles that are live at the source as published,
   and imports with `arrive_as: "as_is"`; nothing becomes public until the person who claims
   it publishes the help center. It never shows the agent key or a migration request's status
   token, and gives the user the preview link when it cannot open pages itself.
